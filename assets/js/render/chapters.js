@@ -1,6 +1,6 @@
 import { el, svg } from '../lib/dom.js';
 import { THEMES } from '../data/timeline.js';
-import { credit, flipCoin, flipHint, missingCoin, plate, sideCaption } from '../components/coin.js';
+import { contestedFlag, credit, flipCoin, flipHint, plate, portrait, schematicCoin, sideCaption } from '../components/coin.js';
 import { disputeBody, factsList, openNote } from '../components/note.js';
 
 const METALS = { silver: 'Արծաթ', copper: 'Պղինձ' };
@@ -13,9 +13,14 @@ const SWOOSH =
 function renderStage(coin) {
   const stage = el('div', { class: 'stage reveal' });
 
-  if (coin.missing) {
-    stage.append(missingCoin(coin.missingNote));
-    if (coin.sides) stage.append(sideCaption(coin.sides).node);
+  if (coin.schematic) {
+    const caption = sideCaption(coin.sides);
+    stage.append(
+      el('div', { class: 'stage__coin' }, schematicCoin({ label: coin.title, ...coin.schematic, onFlip: caption.setActive })),
+      flipHint(),
+      caption.node,
+      el('p', { class: 'credit' }, coin.schematic.note),
+    );
     return stage;
   }
 
@@ -64,13 +69,20 @@ function renderStage(coin) {
   return stage;
 }
 
+/** Language and typeface follow the script named in the data. */
+const SCRIPTS = [
+  { prefix: 'Հունարեն', lang: 'grc', className: 'greek' },
+  { prefix: 'Լատիներեն', lang: 'la', className: 'greek' },
+  { prefix: 'Արամեերեն', lang: 'arc-Latn', className: 'translit' },
+];
+
 function renderInscription({ text, script, meaning }) {
-  const isGreekOrLatin = /[Ͱ-Ͽ]|^[A-Z\s·]+$/.test(text);
+  const { lang, className } = SCRIPTS.find(({ prefix }) => script.startsWith(prefix)) ?? {};
   return el(
     'div',
     { class: 'inscription reveal' },
     el('p', { class: 'inscription__script label' }, script),
-    el('p', { class: `inscription__text ${isGreekOrLatin ? 'greek' : ''}`, lang: isGreekOrLatin ? 'grc' : null }, text),
+    el('p', { class: `inscription__text ${className ?? ''}`, lang }, text),
     el('p', { class: 'inscription__meaning' }, meaning),
   );
 }
@@ -125,6 +137,7 @@ export function renderCoinPanel(coin) {
         el('span', { class: 'info__date' }, coin.date),
         el('span', { class: `metal metal--${coin.metal} label` }, METALS[coin.metal]),
         coin.related && el('span', { class: 'related' }, `→ ${coin.related}`),
+        coin.contested && contestedFlag(coin.contested),
       ),
       el('h4', { class: 'info__title display reveal', id: titleId }, coin.title),
       coin.inscription && renderInscription(coin.inscription),
@@ -143,20 +156,36 @@ export function renderCoinPanel(coin) {
 
 /* ───────── King / interlude header ───────── */
 
-function renderKingPanel(panel) {
-  const count = panel.coins.length;
+/** Keep a regnal numeral (Ա, Բ, Գ…) on the same line as the name before it. */
+const keepNumeral = (name) => name.replace(/ (?=[Ա-Ֆ](?:\s|$))/g, '\u00a0');
+
+function renderHeaderPanel({ id, nav, year, kind, reign, name, tagline, summary, count, portrait: picture }) {
   return el(
     'section',
-    { class: 'panel panel--king', id: panel.id, dataset: { nav: panel.short, year: panel.navYear }, 'aria-label': panel.name },
-    el('p', { class: 'king__kind label reveal' }, panel.kind === 'interlude' ? 'Ընդմիջում' : 'Գահակալություն'),
-    el('p', { class: 'king__reign reveal' }, panel.reign),
-    el('h3', { class: 'king__name display reveal' }, panel.name),
-    svg(SWOOSH),
-    el('p', { class: 'king__tagline reveal' }, panel.tagline),
-    el('p', { class: 'king__summary reveal' }, panel.summary),
-    el('p', { class: 'king__count label reveal' }, `${count} ցուցանմուշ →`),
+    { class: `panel panel--king${picture ? '' : ' panel--no-portrait'}`, id, dataset: { nav, year }, 'aria-label': name },
+    picture && el('div', { class: 'king__portrait reveal' }, portrait(picture)),
+    el(
+      'div',
+      { class: 'king__text' },
+      el('p', { class: 'king__kind label reveal' }, kind),
+      el('p', { class: 'king__reign reveal' }, reign),
+      el('h3', { class: 'king__name display reveal' }, keepNumeral(name)),
+      svg(SWOOSH),
+      el('p', { class: 'king__tagline reveal' }, tagline),
+      el('p', { class: 'king__summary reveal' }, summary),
+      count && el('p', { class: 'king__count label reveal' }, `${count} ցուցանմուշ →`),
+    ),
   );
 }
+
+const renderKingPanel = (panel) =>
+  renderHeaderPanel({
+    ...panel,
+    nav: panel.short,
+    year: panel.navYear,
+    kind: panel.kind === 'interlude' ? 'Ընդմիջում' : 'Գահակալություն',
+    count: panel.coins.length,
+  });
 
 /* ───────── Chapter ───────── */
 
@@ -184,7 +213,7 @@ function renderCover(chapter, label = `Գլուխ ${chapter.num}`) {
 function chapterShell(chapter, panels) {
   return el(
     'section',
-    { class: 'chapter', id: chapter.id, dataset: { tone: chapter.tone }, 'aria-label': `${chapter.title}, ${chapter.period}` },
+    { class: 'chapter', id: `${chapter.id}-chapter`, dataset: { tone: chapter.tone }, 'aria-label': `${chapter.title}, ${chapter.period}` },
     el('div', { class: 'chapter__sticky' }, el('div', { class: 'chapter__track' }, panels)),
   );
 }
@@ -197,16 +226,18 @@ export function renderChapter(chapter) {
 }
 
 export function renderEpilogue(epilogue, afterword) {
-  const navAnchor = el(
-    'section',
-    { class: 'panel panel--king', id: epilogue.id, dataset: { nav: epilogue.period, year: 'Հռոմ' }, 'aria-label': epilogue.title },
-    el('p', { class: 'king__kind label reveal' }, 'Վերջաբան'),
-    el('p', { class: 'king__reign reveal' }, epilogue.period),
-    el('h3', { class: 'king__name display reveal' }, epilogue.title),
-    svg(SWOOSH),
-    el('p', { class: 'king__tagline reveal' }, epilogue.subtitle),
-    el('p', { class: 'king__summary reveal' }, epilogue.intro),
-  );
+  const navAnchor = renderHeaderPanel({
+    id: epilogue.id,
+    nav: 'Հռոմ',
+    year: '34',
+    kind: 'Վերջաբան',
+    reign: epilogue.reign,
+    name: epilogue.title,
+    tagline: epilogue.subtitle,
+    summary: epilogue.intro,
+    count: epilogue.coins.length,
+    portrait: epilogue.portrait,
+  });
 
   const end = el(
     'section',

@@ -6,12 +6,12 @@
 
 ## What's inside
 
-- **Prologue**: coinage before the Artaxiads (Lydia, Erebuni, the Orontids, where the word *dram* comes from).
-- **Four chapters, king by king**, in chronological order. Each coin is a flip card (click to see the reverse) with:
+- **Intro**: a solid green opener explaining *dram ← drachma* before chapter 01.
+- **Four chapters, king by king**, in chronological order. Each reign opens with a duotone portrait: an artwork where one exists, otherwise the king's own coin. Each coin is a flip card (click to see the reverse) with:
   - what the coin tells us, tagged by theme (politics, economy and craft, religion and culture, symbols of power, foreign influence, chronology)
   - what it can **not** prove
   - **Technical data** (weight, diameter, catalogue numbers) behind a button
-  - a **Dispute** note wherever scholars (Bedoukian 1978, Foss 1986, Kovacs 2016 and others) attribute the coin differently
+  - a **Dispute** note wherever scholars (Bedoukian 1978, Foss 1986, Kovacs 2016 and others) attribute the coin differently, plus a *disputed attribution* tooltip next to the date
 - **Rome's view**: Roman coins that celebrate *Armenia Devicta / Capta / Recepta*.
 - **Findings**: the answer to the research question, theme by theme.
 - **Evolution matrix**: every king against metal, script, title, tiara, imagery, portrait and political orientation.
@@ -35,7 +35,7 @@ All text lives in plain data modules, so you can change content without touching
 
 | File | Contents |
 | --- | --- |
-| `assets/js/data/timeline.js` | Prologue, chapters, kings, coins (insights, caveats, technical data, disputes), Roman epilogue |
+| `assets/js/data/timeline.js` | Intro, chapters, kings, coins (insights, caveats, technical data, disputes), Roman epilogue |
 | `assets/js/data/analysis.js` | Evolution matrix and the findings |
 | `assets/js/data/sources.js` | Team, bibliography, photo credits |
 
@@ -53,11 +53,13 @@ assets/js/components/ flip coin, note dialog
 assets/js/render/     chapter and section renderers
 assets/js/scroll/     pinned horizontal scroll, bottom timeline and menu
 assets/img/coins/     coin photos (WebP, obverse and reverse split, background removed)
+assets/img/portraits/ king portraits (artworks)
+.claude/agents/       site-reviewer agent for Claude Code (read-only UI/bug review)
 ```
 
 ## Credits
 
-- Research and texts: Ani, Ashot, Karine, Sergey and Arsen. The content is drawn from the team's working document.
+- Team: Ani Shahoyan, Arsen Sogomonyan, Karina Karagyozyan and Sergey Nersesyan. The content is drawn from the team's working document.
 - Black-and-white catalogue scans come from P. Z. Bedoukian, *Coinage of the Artaxiads of Armenia* (1978), and from R. and K. Vardanyan's articles, via the team document.
 - Colour photographs come from Wikimedia Commons: Bibliothèque nationale de France (public domain / CC0), Classical Numismatic Group, Leu Numismatik and Karen Tokhatyan (CC BY-SA). The full per-image list is on the sources page.
 - Fonts: Noto Sans Armenian, Noto Serif Armenian and GFS Didot, all from Google Fonts.

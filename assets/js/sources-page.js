@@ -1,5 +1,6 @@
 import { el } from './lib/dom.js';
-import { BIBLIOGRAPHY, CREDITS, TEAM } from './data/sources.js';
+import { BIBLIOGRAPHY, CREDITS } from './data/sources.js';
+import { teamBlock } from './components/team.js';
 
 function link(url) {
   return el('a', { href: url, target: '_blank', rel: 'noopener' }, url);
@@ -15,7 +16,7 @@ document.getElementById('bibliography').append(
     ),
   ]).flat(),
   el('h2', { class: 'display' }, 'Թիմ'),
-  el('p', { class: 'serif' }, TEAM.join(' · ')),
+  teamBlock('sources__team'),
 );
 
 document.getElementById('credits').append(

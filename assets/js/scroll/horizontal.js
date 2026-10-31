@@ -8,7 +8,7 @@ import { clamp } from '../lib/dom.js';
  * Only enabled on screens large enough for side-by-side panels; elsewhere the
  * chapters fall back to a normal vertical flow.
  */
-const QUERY = '(min-width: 1000px) and (min-height: 600px)';
+const QUERY = '(min-width: 1000px) and (min-height: 680px)';
 
 export function createHorizontalScroll(chapters, { onUpdate } = {}) {
   const media = window.matchMedia(QUERY);
@@ -84,7 +84,8 @@ export function createHorizontalScroll(chapters, { onUpdate } = {}) {
       const sticky = section.querySelector('.chapter__sticky');
       sticky.scrollLeft = 0;
       const panel = event.target.closest('.panel');
-      if (!panel) return;
+      // Programmatic focus after a link jump (tabindex=-1): the jump already scrolled there.
+      if (!panel || (event.target === panel && panel.getAttribute('tabindex') === '-1')) return;
       const rect = panel.getBoundingClientRect();
       if (rect.left < 0 || rect.right > window.innerWidth) scrollToElement(panel, 'auto');
     });

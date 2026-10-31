@@ -1,7 +1,7 @@
 import { el } from '../lib/dom.js';
-import { coinSrc, credit, flipCoin, flipHint } from '../components/coin.js';
+import { coinSrc, flipCoin, flipHint } from '../components/coin.js';
 import { EVOLUTION, FINDINGS } from '../data/analysis.js';
-import { TEAM } from '../data/sources.js';
+import { teamBlock } from '../components/team.js';
 
 /** Coins shown on the hero's chapter cards. */
 const CARD_COINS = {
@@ -78,39 +78,17 @@ export function renderMenu(chapters) {
   );
 }
 
-export function renderPrologue(prologue) {
+export const renderTeam = () => teamBlock('hero__team');
+
+/** Full-screen opener between the hero and chapter 01. */
+export function renderIntro(intro) {
   return el(
     'section',
-    { class: 'section', id: prologue.id, 'aria-labelledby': 'prologue-title' },
-    el(
-      'div',
-      { class: 'section__head' },
-      el(
-        'div',
-        {},
-        el('p', { class: 'label' }, prologue.label),
-        el('h2', { class: 'section__title display', id: 'prologue-title' }, prologue.title),
-      ),
-      el('p', { class: 'section__lead' }, prologue.lead),
-    ),
-    el(
-      'ol',
-      { class: 'prologue__list' },
-      prologue.cards.map((card) =>
-        el(
-          'li',
-          { class: 'prologue__item reveal' },
-          el('p', { class: 'prologue__when' }, card.when),
-          el('h3', { class: 'prologue__title display' }, card.title),
-          el('p', {}, card.text),
-          card.img && [
-            el('img', { src: coinSrc(card.img), alt: 'Շամ արքայի դրամը', width: 208, height: 92, loading: 'lazy' }),
-            credit(card.credit),
-          ],
-        ),
-      ),
-    ),
-    el('p', { class: 'prologue__note reveal' }, el('strong', {}, 'Դրամ ← դրախմա. '), prologue.note),
+    { class: 'intro', id: intro.id, dataset: { tone: 'patina' }, 'aria-labelledby': 'intro-title' },
+    el('p', { class: 'label reveal' }, intro.kicker),
+    el('h2', { class: 'intro__title display reveal', id: 'intro-title' }, intro.title),
+    el('p', { class: 'intro__text reveal' }, intro.text),
+    el('a', { class: 'intro__next label reveal', href: '#ch1-cover' }, 'Գլուխ 01 ↓'),
   );
 }
 
@@ -244,11 +222,7 @@ export function renderFooter() {
       {},
       el('p', { class: 'label' }, 'Հայոց պատմության դասի նախագիծ'),
       el('h2', { class: 'site-footer__title display' }, 'Արտաշեսյանների դրամները'),
-      el(
-        'ul',
-        { 'aria-label': 'Թիմ' },
-        TEAM.map((name) => el('li', {}, name)),
-      ),
+      teamBlock('site-footer__team'),
     ),
     el(
       'div',

@@ -1,12 +1,16 @@
 import { el, prefersReducedMotion } from '../lib/dom.js';
 
+/** Surfaces with a dark or saturated background; fixed bars switch to light text over them. */
+const DARK_SURFACES = '.intro, .panel--cover, [data-tone="ink"], .section--dark, .site-footer';
+
 /**
  * Bottom timeline (years with a dot on the current reign), in-page anchor
  * handling that understands the horizontal tracks, and the full-screen menu.
  */
-export function createNavigation({ scroller, navRoot, menu, menuToggle, hero }) {
+export function createNavigation({ scroller, navRoot, menu, menuToggle, hero, header }) {
   const targets = [...document.querySelectorAll('[data-nav]')];
   const behavior = () => (prefersReducedMotion() ? 'auto' : 'smooth');
+  const background = () => [document.querySelector('main'), navRoot, document.querySelector('.site-footer')];
 
   const links = targets.map((target) =>
     el(
@@ -25,6 +29,12 @@ export function createNavigation({ scroller, navRoot, menu, menuToggle, hero }) 
   );
 
   let current = -1;
+
+  /** Is the page surface under the given viewport point dark? Fixed bars themselves are skipped. */
+  function isDarkAt(y) {
+    const under = document.elementsFromPoint(window.innerWidth / 2, y).find((node) => !node.closest('.site-header, .timeline-nav, .note'));
+    return Boolean(under?.closest(DARK_SURFACES));
+  }
 
   function update() {
     const threshold = scroller.isActive() ? window.innerWidth * 0.45 : window.innerHeight * 0.45;
@@ -47,6 +57,8 @@ export function createNavigation({ scroller, navRoot, menu, menuToggle, hero }) 
     }
 
     navRoot.classList.toggle('is-shown', hero.getBoundingClientRect().bottom < window.innerHeight * 0.5 && index !== -1);
+    if (!menu.classList.contains('is-open')) header.classList.toggle('is-on-dark', isDarkAt(header.offsetHeight / 2));
+    navRoot.classList.toggle('is-on-dark', isDarkAt(window.innerHeight - navRoot.offsetHeight / 2));
   }
 
   function goTo(id, { updateHash = true } = {}) {
@@ -54,6 +66,9 @@ export function createNavigation({ scroller, navRoot, menu, menuToggle, hero }) 
     if (!target) return false;
     scroller.scrollToElement(target, behavior());
     if (updateHash) history.replaceState(null, '', `#${id}`);
+    // Move keyboard / screen-reader focus with the jump.
+    if (!target.hasAttribute('tabindex')) target.setAttribute('tabindex', '-1');
+    target.focus({ preventScroll: true });
     return true;
   }
 
@@ -62,17 +77,15 @@ export function createNavigation({ scroller, navRoot, menu, menuToggle, hero }) 
     const link = event.target.closest('a[href^="#"]');
     if (!link) return;
     const id = decodeURIComponent(link.getAttribute('href').slice(1));
+    event.preventDefault();
+    setMenu(false);
     if (id === 'top') {
-      event.preventDefault();
-      setMenu(false);
       window.scrollTo({ top: 0, behavior: behavior() });
       history.replaceState(null, '', location.pathname);
+      menuToggle.focus({ preventScroll: true });
       return;
     }
-    if (goTo(id)) {
-      event.preventDefault();
-      setMenu(false);
-    }
+    goTo(id);
   });
 
   // ← / → step between reigns while the timeline is pinned horizontally.
@@ -89,8 +102,12 @@ export function createNavigation({ scroller, navRoot, menu, menuToggle, hero }) 
   });
 
   function setMenu(open) {
+    if (open === menu.classList.contains('is-open')) return;
     menu.classList.toggle('is-open', open);
     menu.inert = !open;
+    // Keep Tab inside the overlay while it is open.
+    background().forEach((node) => node && (node.inert = open));
+    header.classList.toggle('is-on-dark', open || isDarkAt(header.offsetHeight / 2));
     menuToggle.setAttribute('aria-expanded', String(open));
     document.body.style.overflow = open ? 'hidden' : '';
     if (open) menu.querySelector('a')?.focus();
@@ -111,7 +128,10 @@ export function createNavigation({ scroller, navRoot, menu, menuToggle, hero }) 
     history.scrollRestoration = 'manual';
     const jump = () => {
       const target = document.getElementById(decodeURIComponent(location.hash.slice(1)));
-      if (target) window.scrollTo({ top: scroller.positionOf(target), behavior: 'instant' });
+      if (!target) return;
+      // Older browsers without `overflow: clip` let the native anchor jump scroll the sticky boxes.
+      document.querySelectorAll('.chapter__sticky').forEach((sticky) => (sticky.scrollLeft = 0));
+      window.scrollTo({ top: scroller.positionOf(target), behavior: 'instant' });
     };
     jump();
     document.fonts?.ready.then(jump);

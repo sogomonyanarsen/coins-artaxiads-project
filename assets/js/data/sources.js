@@ -1,6 +1,6 @@
 /** Bibliography, team and image credits. */
 
-export const TEAM = ['Անի', 'Աշոտ', 'Կարինե', 'Սերգեյ', 'Արսեն'];
+export const TEAM = ['Անի Շահոյան', 'Արսեն Սողոմոնյան', 'Կարինա Կարագյոզյան', 'Սերգեյ Ներսեսյան'];
 
 export const BIBLIOGRAPHY = [
   {
@@ -168,9 +168,24 @@ export const CREDITS = {
     license: 'CC BY-SA 2.5',
     url: 'https://commons.wikimedia.org/wiki/File:Augustus_ARMENIA_RECEPTA.jpg',
   },
-  sames: {
-    label: 'Wikimedia Commons (ըստ Y. T. Nercessian)',
+  'portrait-artaxias': {
+    label: 'Armineaghayan',
+    license: 'CC BY-SA 3.0',
+    url: 'https://commons.wikimedia.org/wiki/File:Artashat,_Artashes_(2).jpg',
+  },
+  'portrait-artavazd1': {
+    label: 'Ժան Ֆուզարո կամ Ջուզեպպե Կանելլա',
     license: 'CC BY-SA 4.0',
-    url: 'https://commons.wikimedia.org/wiki/File:Sames_coin_260_BC.png',
+    url: 'https://commons.wikimedia.org/wiki/File:Artavasdes_I_falling_into_the_cave_of_Masis.jpg',
+  },
+  'portrait-tigran2': {
+    label: 'Wikimedia Commons',
+    license: 'Հանրային սեփականություն',
+    url: 'https://commons.wikimedia.org/wiki/File:Tigranes_2.jpg',
+  },
+  'portrait-artavazd2': {
+    label: "O'micron",
+    license: 'CC BY-SA 4.0',
+    url: 'https://commons.wikimedia.org/wiki/File:Artavasdes_II,_king_of_Armenia.png',
   },
 };

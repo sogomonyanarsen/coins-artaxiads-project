@@ -1,4 +1,4 @@
-import { AFTERWORD, CHAPTERS, EPILOGUE, PROLOGUE } from './data/timeline.js';
+import { AFTERWORD, CHAPTERS, EPILOGUE, INTRO } from './data/timeline.js';
 import { renderChapter, renderEpilogue } from './render/chapters.js';
 import {
   renderChapterCards,
@@ -6,8 +6,9 @@ import {
   renderFindings,
   renderFooter,
   renderHeroCoin,
+  renderIntro,
   renderMenu,
-  renderPrologue,
+  renderTeam,
 } from './render/sections.js';
 import { createHorizontalScroll } from './scroll/horizontal.js';
 import { createNavigation } from './scroll/navigation.js';
@@ -35,11 +36,12 @@ function init() {
   const allChapters = [...CHAPTERS, EPILOGUE];
 
   document.getElementById('hero-coin').append(renderHeroCoin());
+  document.querySelector('.hero__aside').append(renderTeam());
   document.getElementById('chapter-cards').append(...renderChapterCards(allChapters));
   document.getElementById('menu').append(renderMenu(allChapters));
 
   const chapterSections = [...CHAPTERS.map(renderChapter), renderEpilogue(EPILOGUE, AFTERWORD)];
-  document.getElementById('timeline').append(renderPrologue(PROLOGUE), ...chapterSections, renderFindings(), renderEvolution());
+  document.getElementById('timeline').append(renderIntro(INTRO), ...chapterSections, renderFindings(), renderEvolution());
   document.body.append(renderFooter());
 
   let navigation;
@@ -50,6 +52,7 @@ function init() {
     menu: document.getElementById('menu'),
     menuToggle: document.getElementById('menu-toggle'),
     hero: document.querySelector('.hero'),
+    header: document.querySelector('.site-header'),
   });
   navigation.update();
 
