@@ -1,0 +1,71 @@
+/* Design tokens: archival paper, ink and the four metals/pigments of the chapters. */
+:root {
+  --paper: #f1eada;
+  --paper-deep: #e4d9c2;
+  --paper-edge: #d6c8ab;
+  --ink: #141210;
+  --ink-soft: #2a2622;
+  --muted: #6d6457;
+  --line: rgb(20 18 16 / 0.16);
+
+  --garnet: #b3313d;
+  --patina: #2e6b5b;
+  --bronze: #a0602c;
+  --gold: #b08a2e;
+  --violet: #634a84;
+  --stone: #857d70;
+  --silver: #b9bcc2;
+  --copper: #b06b3e;
+
+  /* Theme chip colours (what the coin tells) */
+  --theme-politics: var(--garnet);
+  --theme-economy: var(--bronze);
+  --theme-culture: var(--violet);
+  --theme-power: var(--gold);
+  --theme-influence: var(--patina);
+  --theme-chronology: var(--stone);
+
+  --f-display: 'Noto Sans Armenian', 'Arial Narrow', sans-serif;
+  --f-body: 'Noto Sans Armenian', system-ui, sans-serif;
+  --f-serif: 'Noto Serif Armenian', Georgia, serif;
+  --f-greek: 'GFS Didot', 'Noto Serif', Georgia, serif;
+
+  --header-h: 3.5rem;
+  --nav-h: 3.75rem;
+  --gutter: clamp(1rem, 3vw, 3rem);
+  --radius: 4px;
+
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-flip: cubic-bezier(0.6, 0, 0.2, 1);
+  --shadow-coin: 0 1.6rem 2.4rem -1.2rem rgb(20 18 16 / 0.45), 0 0.3rem 0.6rem rgb(20 18 16 / 0.18);
+  --shadow-card: 0 1.2rem 3rem -1rem rgb(20 18 16 / 0.35);
+}
+
+/* Per-chapter palette. Panels read --bg / --fg / --accent from the closest [data-tone]. */
+[data-tone] {
+  --bg: var(--paper);
+  --fg: var(--ink);
+  --sub: var(--muted);
+  --rule: var(--line);
+}
+
+[data-tone='patina'] {
+  --accent: var(--patina);
+}
+[data-tone='garnet'] {
+  --accent: var(--garnet);
+}
+[data-tone='bronze'] {
+  --accent: var(--bronze);
+}
+[data-tone='stone'] {
+  --accent: var(--stone);
+}
+
+[data-tone='ink'] {
+  --accent: #d9a441;
+  --bg: var(--ink);
+  --fg: var(--paper);
+  --sub: #a99f8f;
+  --rule: rgb(241 234 218 / 0.18);
+}

@@ -1,0 +1,778 @@
+/* ───────────── Flip coin ───────────── */
+.coin {
+  --size: 100%;
+  position: relative;
+  display: block;
+  width: var(--size);
+  aspect-ratio: 1;
+  perspective: 1400px;
+  border-radius: 50%;
+}
+
+.coin__inner {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+  transition: transform 0.9s var(--ease-flip);
+}
+
+.coin[aria-pressed='true'] .coin__inner {
+  transform: rotateY(180deg);
+}
+
+.coin:hover:not([aria-pressed='true']) .coin__inner {
+  transform: rotateY(-14deg) rotateX(6deg);
+}
+
+.coin__face {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  backface-visibility: hidden;
+  filter: drop-shadow(0 1.1rem 1.1rem rgb(20 18 16 / 0.35));
+}
+
+.coin__face--rev {
+  transform: rotateY(180deg);
+}
+
+[data-tone='ink'] .coin__face {
+  filter: drop-shadow(0 1.1rem 1.6rem rgb(0 0 0 / 0.7));
+}
+
+.coin-hint {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--sub);
+}
+
+.coin-hint svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+/* Floating hero coin */
+.hero__coin .coin {
+  animation: float 7s ease-in-out infinite;
+}
+
+@keyframes float {
+  50% {
+    transform: translateY(-0.9rem) rotate(-2deg);
+  }
+}
+
+/* ───────────── Coin stage (left column of a coin panel) ───────────── */
+.stage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  min-width: 0;
+}
+
+.stage__coin {
+  width: min(100%, 26rem, 52vh);
+}
+
+.stage__multi {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+  width: 100%;
+}
+
+.stage__multi figure {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+  margin: 0;
+  text-align: center;
+  font-size: 0.8rem;
+  color: var(--sub);
+}
+
+.stage__caption {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.15rem 0.75rem;
+  width: min(100%, 26rem);
+  font-size: 0.85rem;
+}
+
+.stage__caption dt {
+  color: var(--sub);
+}
+
+.stage__caption dd {
+  margin: 0;
+}
+
+.stage__caption [data-active='true'] {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.plate {
+  margin: 0;
+  width: 100%;
+}
+
+.plate img {
+  width: 100%;
+  max-height: 34vh;
+  object-fit: contain;
+  mix-blend-mode: multiply;
+}
+
+[data-tone='ink'] .plate img {
+  mix-blend-mode: normal;
+  border-radius: var(--radius);
+}
+
+.plate figcaption,
+.credit {
+  margin-top: 0.4rem;
+  font-size: 0.7rem;
+  color: var(--sub);
+  text-align: center;
+}
+
+.credit a {
+  text-underline-offset: 0.2em;
+}
+
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.75rem;
+  width: 100%;
+}
+
+.gallery figure {
+  margin: 0;
+  font-size: 0.72rem;
+  text-align: center;
+  color: var(--sub);
+}
+
+.gallery img {
+  width: 100%;
+  aspect-ratio: 2 / 1;
+  object-fit: contain;
+  mix-blend-mode: multiply;
+}
+
+/* Missing coin placeholder */
+.coin-missing {
+  display: grid;
+  place-items: center;
+  width: min(100%, 22rem, 46vh);
+  aspect-ratio: 1;
+  border: 2px dashed var(--rule);
+  border-radius: 50%;
+  color: var(--sub);
+  text-align: center;
+}
+
+.coin-missing span {
+  font-family: var(--f-display);
+  font-stretch: 62.5%;
+  font-weight: 800;
+  font-size: 8rem;
+  line-height: 1;
+  color: var(--accent);
+}
+
+.coin-missing p {
+  max-width: 14rem;
+  font-size: 0.8rem;
+}
+
+/* ───────────── Coin info (right column) ───────────── */
+.info {
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+  min-width: 0;
+}
+
+.info__kicker {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 1rem;
+  color: var(--sub);
+}
+
+.info__date {
+  font-family: var(--f-serif);
+  font-size: 1rem;
+  color: var(--fg);
+}
+
+.metal {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.metal::before {
+  content: '';
+  width: 0.8rem;
+  height: 0.8rem;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #fff 0, var(--metal) 55%, color-mix(in srgb, var(--metal) 60%, #000) 100%);
+}
+
+.metal--silver {
+  --metal: var(--silver);
+}
+.metal--copper {
+  --metal: var(--copper);
+}
+
+.info__title {
+  font-size: clamp(2rem, min(6.2vh, 9vw), 4.4rem);
+}
+
+.inscription {
+  padding: 0.85rem 1rem;
+  border-left: 3px solid var(--accent);
+  background: color-mix(in srgb, var(--fg) 5%, transparent);
+}
+
+.inscription__script {
+  margin-bottom: 0.35rem;
+  opacity: 0.7;
+}
+
+.inscription__text {
+  font-size: clamp(1rem, 2.3vh, 1.35rem);
+  overflow-wrap: anywhere;
+}
+
+.inscription__meaning {
+  margin-top: 0.25rem;
+  font-family: var(--f-serif);
+  color: var(--sub);
+}
+
+.insights {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.9rem 1.5rem;
+}
+
+.insight {
+  padding-top: 0.6rem;
+  border-top: 2px solid var(--theme);
+  font-size: clamp(0.84rem, 1.75vh, 0.95rem);
+  line-height: 1.5;
+}
+
+.insight__theme {
+  display: block;
+  margin-bottom: 0.25rem;
+  color: var(--theme);
+}
+
+[data-tone='ink'] .insight__theme {
+  filter: brightness(1.6) saturate(0.9);
+}
+
+.insight[data-theme='politics'] {
+  --theme: var(--theme-politics);
+}
+.insight[data-theme='economy'] {
+  --theme: var(--theme-economy);
+}
+.insight[data-theme='culture'] {
+  --theme: var(--theme-culture);
+}
+.insight[data-theme='power'] {
+  --theme: var(--theme-power);
+}
+.insight[data-theme='influence'] {
+  --theme: var(--theme-influence);
+}
+.insight[data-theme='chronology'] {
+  --theme: var(--theme-chronology);
+}
+
+.caveat {
+  display: flex;
+  gap: 0.75rem;
+  font-size: 0.85rem;
+  color: var(--sub);
+}
+
+.caveat::before {
+  content: '!';
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 1.4rem;
+  height: 1.4rem;
+  border: 1px solid currentColor;
+  border-radius: 50%;
+  font-weight: 700;
+  font-size: 0.8rem;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.55rem 1rem;
+  border: 1px solid currentColor;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition:
+    background 0.2s,
+    color 0.2s;
+}
+
+.btn:hover {
+  background: var(--fg);
+  color: var(--bg);
+}
+
+.btn--dispute {
+  border-color: var(--garnet);
+  background: var(--garnet);
+  color: var(--paper);
+}
+
+.btn--dispute:hover {
+  background: transparent;
+  color: var(--garnet);
+}
+
+[data-tone='ink'] .btn--dispute:hover {
+  color: #ff8f99;
+}
+
+.related {
+  font-family: var(--f-serif);
+  color: var(--accent);
+}
+
+/* ───────────── Note dialog (technical data / dispute) ───────────── */
+.note {
+  width: min(34rem, 100vw - 2rem);
+  max-height: calc(100vh - 2rem);
+  margin: auto 1rem auto auto;
+  padding: 0;
+  border: 0;
+  border-radius: 2px;
+  background: #faf5ea;
+  color: var(--ink);
+  box-shadow: var(--shadow-card);
+  transform: translateX(0) rotate(0.6deg);
+}
+
+.note[open] {
+  animation: note-in 0.45s var(--ease-out);
+}
+
+.note::backdrop {
+  background: rgb(20 18 16 / 0.45);
+}
+
+@keyframes note-in {
+  from {
+    opacity: 0;
+    transform: translateX(3rem) rotate(2deg);
+  }
+}
+
+.note__inner {
+  padding: 1.75rem 1.75rem 2rem;
+  font-family: var(--f-serif);
+  background-image: repeating-linear-gradient(transparent 0 1.7rem, rgb(20 18 16 / 0.06) 1.7rem calc(1.7rem + 1px));
+}
+
+.note__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.note__kicker {
+  color: var(--garnet);
+}
+
+.note__title {
+  margin-top: 0.35rem;
+  font-family: var(--f-display);
+  font-stretch: 62.5%;
+  font-weight: 800;
+  font-size: 2rem;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.note__close {
+  flex: none;
+  width: 2.2rem;
+  height: 2.2rem;
+  border: 1px solid var(--ink);
+  border-radius: 50%;
+  font-size: 1.1rem;
+  line-height: 1;
+}
+
+.note__close:hover {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.facts {
+  display: grid;
+  grid-template-columns: minmax(7rem, auto) 1fr;
+  margin: 0;
+}
+
+.facts dt,
+.facts dd {
+  margin: 0;
+  padding: 0.55rem 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.facts dt {
+  padding-right: 1rem;
+  color: var(--muted);
+}
+
+.views {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.views li {
+  padding-left: 1rem;
+  border-left: 2px solid var(--garnet);
+}
+
+.views strong {
+  display: block;
+  font-family: var(--f-body);
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.note table {
+  width: 100%;
+  margin-bottom: 1.25rem;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+}
+
+.note th,
+.note td {
+  padding: 0.45rem 0.5rem;
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+}
+
+.note th {
+  font-family: var(--f-body);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+/* ───────────── Prologue ───────────── */
+.prologue__list {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0 clamp(1.5rem, 3vw, 3rem);
+}
+
+.prologue__item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  padding: 1.25rem 0 2.25rem;
+  border-top: 1px solid var(--ink);
+}
+
+.prologue__when {
+  font-family: var(--f-serif);
+  color: var(--garnet);
+}
+
+.prologue__title {
+  font-size: 2rem;
+}
+
+.prologue__item img {
+  width: 100%;
+  max-width: 14rem;
+  mix-blend-mode: multiply;
+}
+
+.prologue__note {
+  margin-top: 3rem;
+  max-width: 44rem;
+  font-family: var(--f-serif);
+  font-size: clamp(1.1rem, 2vw, 1.5rem);
+}
+
+.prologue__note strong {
+  color: var(--garnet);
+  font-weight: 600;
+}
+
+/* ───────────── Findings ───────────── */
+.findings {
+  display: grid;
+  gap: 0;
+  border-top: 1px solid rgb(241 234 218 / 0.25);
+}
+
+.finding {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.4fr);
+  gap: 1.5rem 3rem;
+  padding: 2.5rem 0;
+  border-bottom: 1px solid rgb(241 234 218 / 0.25);
+}
+
+.finding__title {
+  font-size: clamp(2.2rem, 5vw, 4.4rem);
+  overflow-wrap: anywhere;
+  color: var(--theme);
+  filter: brightness(1.45);
+}
+
+.finding__claim {
+  margin-top: 0.75rem;
+  font-family: var(--f-serif);
+  font-size: 1.15rem;
+}
+
+.finding ul {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  counter-reset: point;
+}
+
+.finding li {
+  position: relative;
+  padding-left: 2.25rem;
+  color: #d8cfbf;
+}
+
+.finding li::before {
+  counter-increment: point;
+  content: counter(point, decimal-leading-zero);
+  position: absolute;
+  left: 0;
+  top: 0.1rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--theme);
+  filter: brightness(1.45);
+}
+
+.finding[data-theme='politics'] {
+  --theme: var(--theme-politics);
+}
+.finding[data-theme='economy'] {
+  --theme: var(--theme-economy);
+}
+.finding[data-theme='culture'] {
+  --theme: var(--theme-culture);
+}
+.finding[data-theme='power'] {
+  --theme: var(--theme-power);
+}
+.finding[data-theme='influence'] {
+  --theme: var(--theme-influence);
+}
+.finding[data-theme='chronology'] {
+  --theme: var(--theme-chronology);
+}
+
+/* ───────────── Evolution matrix ───────────── */
+.matrix-wrap {
+  overflow-x: auto;
+  margin-inline: calc(var(--gutter) * -1);
+  padding-inline: var(--gutter);
+}
+
+.matrix {
+  width: max-content;
+  min-width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+
+.matrix th,
+.matrix td {
+  width: 9.5rem;
+  max-width: 9.5rem;
+  padding: 0.75rem 0.6rem;
+  border-bottom: 1px solid var(--line);
+  vertical-align: top;
+  text-align: left;
+}
+
+.matrix thead th {
+  vertical-align: bottom;
+  border-bottom: 2px solid var(--ink);
+}
+
+.matrix thead a {
+  display: block;
+  text-decoration: none;
+}
+
+.matrix thead a:hover strong {
+  color: var(--garnet);
+}
+
+.matrix thead strong {
+  display: block;
+  font-family: var(--f-display);
+  font-stretch: 62.5%;
+  font-size: 1.35rem;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.matrix thead span {
+  font-family: var(--f-serif);
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+.matrix tbody th {
+  position: sticky;
+  left: calc(var(--gutter) * -1);
+  z-index: 1;
+  width: 10rem;
+  background: var(--paper);
+}
+
+.matrix tbody th strong {
+  display: block;
+  font-size: 0.95rem;
+}
+
+.matrix tbody th span {
+  font-weight: 400;
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+.matrix td.is-disputed span {
+  text-decoration: underline dotted var(--garnet);
+  text-underline-offset: 0.25em;
+}
+
+.matrix td.is-disputed::after {
+  content: 'վիճելի';
+  display: block;
+  margin-top: 0.25rem;
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--garnet);
+}
+
+.matrix .meter {
+  display: block;
+  height: 4px;
+  margin-top: 0.5rem;
+  background: linear-gradient(to right, var(--gold) var(--level), var(--paper-edge) var(--level));
+}
+
+.matrix [data-col].is-hover {
+  background: color-mix(in srgb, var(--gold) 14%, transparent);
+}
+
+.matrix-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  margin-top: 1.25rem;
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+/* ───────────── Sources page ───────────── */
+.sources {
+  max-width: 60rem;
+}
+
+.sources h2 {
+  margin: 3rem 0 1rem;
+  font-size: clamp(2rem, 4vw, 3rem);
+}
+
+.sources ol {
+  list-style: decimal;
+  padding-left: 1.5rem;
+}
+
+.sources li {
+  padding: 0.6rem 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.sources li small {
+  display: block;
+  color: var(--muted);
+}
+
+.sources a {
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 1000px) {
+  .insights,
+  .finding {
+    grid-template-columns: 1fr;
+  }
+
+  .stage__coin {
+    width: min(80vw, 22rem);
+  }
+
+  .gallery {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .prologue__list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 560px) {
+  .prologue__list {
+    grid-template-columns: 1fr;
+  }
+}
