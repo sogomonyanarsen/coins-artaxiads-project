@@ -667,8 +667,8 @@
 }
 
 .team__names {
-  display: grid;
-  grid-template-columns: repeat(4, max-content);
+  display: flex;
+  flex-wrap: wrap;
   gap: 0.3rem 1.75rem;
   margin-top: 0.5rem;
   font-family: var(--f-serif);
@@ -685,19 +685,9 @@
   color: #a99f8f;
 }
 
-.sources__team .team__names {
-  grid-template-columns: repeat(auto-fit, minmax(12rem, max-content));
-}
-
-@media (max-width: 1400px) {
-  .team__names {
-    grid-template-columns: repeat(2, max-content);
-  }
-}
-
 @media (max-width: 400px) {
   .team__names {
-    grid-template-columns: 1fr;
+    flex-direction: column;
   }
 }
 

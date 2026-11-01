@@ -1,6 +1,6 @@
 /** Bibliography, team and image credits. */
 
-export const TEAM = ['Անի Շահոյան', 'Արսեն Սողոմոնյան', 'Կարինա Կարագյոզյան', 'Սերգեյ Ներսեսյան'];
+export const TEAM = ['Անի Շահոյան', 'Արսեն Սողոմոնյան', 'Կարինա Կարագյոզյան', 'Սերգեյ Ներսեսյան', 'Աշոտ Զաքարյան'];
 
 export const BIBLIOGRAPHY = [
   {

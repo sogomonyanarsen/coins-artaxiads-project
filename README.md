@@ -59,7 +59,7 @@ assets/img/portraits/ king portraits (artworks)
 
 ## Credits
 
-- Team: Ani Shahoyan, Arsen Sogomonyan, Karina Karagyozyan and Sergey Nersesyan. The content is drawn from the team's working document.
+- Team: Ani Shahoyan, Arsen Sogomonyan, Karina Karagyozyan, Sergey Nersesyan and Ashot Zakaryan. The content is drawn from the team's working document.
 - Black-and-white catalogue scans come from P. Z. Bedoukian, *Coinage of the Artaxiads of Armenia* (1978), and from R. and K. Vardanyan's articles, via the team document.
 - Colour photographs come from Wikimedia Commons: Bibliothèque nationale de France (public domain / CC0), Classical Numismatic Group, Leu Numismatik and Karen Tokhatyan (CC BY-SA). The full per-image list is on the sources page.
 - Fonts: Noto Sans Armenian, Noto Serif Armenian and GFS Didot, all from Google Fonts.
