@@ -229,7 +229,14 @@
   font-size: clamp(1.8rem, 2.8vw, 3rem);
 }
 
+.chapter-card > span {
+  position: relative;
+  z-index: 1;
+}
+
 .chapter-card__title {
+  /* Wraps before it reaches the coin peeking from the corner. */
+  max-width: calc(100% - 4.5rem);
   margin-top: 0.4rem;
   font-family: var(--f-serif);
   font-size: 0.95rem;
@@ -237,16 +244,17 @@
 
 .chapter-card__coin {
   position: absolute;
-  right: -1.5rem;
-  bottom: -2.5rem;
-  width: 9.5rem;
+  right: -1.25rem;
+  bottom: -2.25rem;
+  width: 7.5rem;
   filter: drop-shadow(0 0.8rem 1rem rgb(0 0 0 / 0.35));
   transition: transform 0.6s var(--ease-out);
 }
 
+/* Spin in place: a turning disc covers the same corner, so the text stays clear. */
 .chapter-card:hover .chapter-card__coin,
 .chapter-card:focus-visible .chapter-card__coin {
-  transform: translate(-1rem, -2rem) rotate(-12deg);
+  transform: rotate(-25deg);
 }
 
 /* ───────────── Vertical sections ───────────── */

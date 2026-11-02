@@ -699,6 +699,7 @@
 }
 
 .finding {
+  container-type: inline-size;
   display: grid;
   grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.4fr);
   gap: 1.5rem 3rem;
@@ -707,8 +708,9 @@
 }
 
 .finding__title {
-  font-size: clamp(2.2rem, 5vw, 4.4rem);
-  overflow-wrap: anywhere;
+  /* Capped by the row width too, so a long single word never splits in the narrow two-column layout. */
+  font-size: clamp(2.2rem, min(5vw, 5cqi), 4.4rem);
+  overflow-wrap: break-word;
   color: var(--theme);
   filter: brightness(1.45);
 }
